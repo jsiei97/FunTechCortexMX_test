@@ -7,6 +7,13 @@ chmod 755 run_test.bsh
 ./run_test.bsh
 
 
+Or do it by hand:
+source ~/stm32/bin/stm32_setup.sh
+make TEST=test03 flash 
+ddd --eval-command="target remote localhost:3333" --debugger arm-none-eabi-gdb  main.elf
+
+
+
 Ignore the rest of this file...
 
 
