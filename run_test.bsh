@@ -1,0 +1,103 @@
+#!/bin/bash 
+
+
+function did_it_work {
+    code=$1
+    #echo "did: "$code
+    if [ ! $code = 0 ]
+    then
+        echo "Error failure: code $code "
+        exit 1
+    fi
+}
+
+function run_test {
+    tes=$1
+    log=$2
+
+    echo "Begin test: $tes ( $log )"
+
+    make flash TEST=$tes
+    did_it_work $?
+
+    #sleep 3
+
+    if [ ! -f main.elf ]; then
+        echo "Missing main.elf"
+        exit 1
+    fi
+
+    arm-none-eabi-gdb \
+        --eval-command="set logging on" \
+        --batch --command=res/commands.gdb \
+        main.elf
+    #scripts/gdb_runner.pl main.elf $log
+    did_it_work $?
+
+    mv gdb.txt $log
+
+    make clean
+    did_it_work $?
+
+    sleep 1
+
+    echo "End test: $f"
+    echo ""
+}
+
+
+
+
+CWD=`pwd`
+
+#source ~/stm32/bin/stm32_setup.sh 
+#did_it_work $?
+
+
+scripts/start_server.bsh 
+did_it_work $?
+
+make clean
+# No check.
+
+#for f in $(find -name *.c | sed 's/\.\/\(test[0-9][0-9]\).*/\1/');
+for f in $( ls -1 -d test* );
+do
+    log=$CWD/log.$f.txt
+
+    run_test $f $log
+
+done
+
+echo 
+echo "Results:"
+echo " OK:   "`grep test_success    log.test*.txt | grep Breakpoint | wc -l`
+echo " FAIL  "`grep test_failed     log.test*.txt | grep Breakpoint | wc -l`
+echo " Err   "`grep Default_Handler log.test*.txt | grep Breakpoint | wc -l`
+echo 
+
+for f in $( ls -1 log.test*.txt );
+do
+    if [ "`grep test_success $f | grep Breakpoint | wc -l`" = "1" ]
+    then 
+        echo $f" - OK"
+    fi
+
+    if [ "`grep test_failed $f | grep Breakpoint | wc -l`" = "1" ]
+    then 
+        echo $f" - FAIL"
+    fi
+
+    if [ "`grep Default_Handler $f | grep Breakpoint | wc -l`" = "1" ]
+    then 
+        echo $f" - Error"
+    fi
+
+done
+
+
+exit 0;
+
+
+# kill `ps -A | grep openocd | awk '{print $1}'`
+

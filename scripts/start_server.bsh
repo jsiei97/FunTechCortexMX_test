@@ -1,0 +1,15 @@
+#!/bin/bash 
+
+if [ `ps -A | grep openocd | wc -l` = 0 ]
+then
+    echo "Start the OpenOCD server"
+    xterm -e "openocd -f res/openocd.cfg" &
+    #openocd -f res/openocd.cfg --log_output log.OpenOCD.server &
+
+    sleep 5
+fi
+
+
+# kill `ps -A | grep openocd | awk '{print $1}'`
+
+exit 0

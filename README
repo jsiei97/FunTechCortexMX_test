@@ -1,0 +1,36 @@
+First build the gcc that you would like to test 
+see http://fun-tech.se/stm32/ for more info on this topic.
+
+Then run this script:
+source ~/stm32/bin/stm32_setup.sh
+chmod 755 run_test.bsh
+./run_test.bsh
+
+
+Ignore the rest of this file...
+
+
+xterm -e "telnet localhost 4444" &
+
+arm-none-eabi-insight --eval-command="target remote localhost:3333" main.elf
+arm-none-eabi-gdbtui  --eval-command="target remote localhost:3333" main.elf
+arm-none-eabi-gdb     --eval-command="target remote localhost:3333" main.elf
+
+ddd --eval-command="target remote localhost:3333" --debugger arm-none-eabi-gdb  main.elf
+
+Fixa adress: 
+arm-none-eabi-readelf -s main.elf | grep test_success | awk '{print $2}'
+arm-none-eabi-readelf -s main.elf | grep test_failed  | awk '{print $2}'
+
+telnet:
+bp 0x15 1 hw
+bp 0x19 1 hw
+
+gdb:
+break test_success
+break test_failed
+cont
+frame
+
+arm-none-eabi-gdb --batch --command=res/commands.gdb main.elf
+
