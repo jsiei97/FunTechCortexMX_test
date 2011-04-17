@@ -68,7 +68,6 @@ flash: all
 clean:
 	-rm -f main.o startup_stm32f10x.o test*.o 
 	-rm -f main.lst main.elf main.bin startup_stm32f10x.lst 
-	-rm -f log.*.txt
 
 .PHONY: clean_all
 clean_all: clean
