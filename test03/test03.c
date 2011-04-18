@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /**
  * Start test to see that sprintf is working.
@@ -9,7 +10,8 @@
 int start_test()
 {
     int test = 1;
-    char str[10];
+    int arr_size=10;
+    char str[arr_size];
 
     //First add something and check it.
     sprintf(str, "1234");
@@ -29,7 +31,8 @@ int start_test()
 
 
     //First add something else and check it.
-    sprintf(str, "4321");
+    //sprintf(str, "4321");
+    sprintf(str, "%d", 4321);
 
     if(str[0] != '4')
     {
@@ -52,5 +55,20 @@ int start_test()
     test++;
 
 
+    //And check that snprintf is working as well
+    snprintf(str, arr_size, "5678");
+
+    if(str[0] != '5')
+    {
+        return test;
+    }
+    test++;
+
+    if(str[1] != '6')
+    {
+        return test;
+    }
+    test++;
+ 
     return 0;
 }
