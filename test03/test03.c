@@ -43,7 +43,13 @@ int start_test()
     }
     test++;
 
-
+    //Check strlen so "4321" is 4 chars!
+    int size = strlen(str);
+    if(size != 4)
+    {
+        return test;
+    }
+    test++;
 
 
     return 0;

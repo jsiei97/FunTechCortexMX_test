@@ -46,6 +46,13 @@ function run_test {
 }
 
 
+if [ "$1" = "--help" ]
+then
+    echo "Usage:"
+    echo $0"        - run all tests"
+    echo $0" test03 - run test03 aka test03/test03.c"
+    exit 0;
+fi
 
 
 CWD=`pwd`
@@ -57,17 +64,31 @@ CWD=`pwd`
 scripts/start_server.bsh 
 did_it_work $?
 
-make clean
+make clean_all
 # No check.
 
-#for f in $(find -name *.c | sed 's/\.\/\(test[0-9][0-9]\).*/\1/');
-for f in $( ls -1 -d test* );
-do
-    log=$CWD/log.$f.txt
+if [ $1 ]
+then
+    if [ ! -d $1 ]
+    then
+        echo "Fail no valid dir..."
+        exit 1
+    fi
 
-    run_test $f $log
+    test=`echo $1 | tr -d '/'`
+    #Run one test
+    log=$CWD/log.$test.txt
+    run_test $test $log
 
-done
+else
+    #for f in $(find -name *.c | sed 's/\.\/\(test[0-9][0-9]\).*/\1/');
+    for f in $( ls -1 -d test* );
+    do
+        log=$CWD/log.$f.txt
+        run_test $f $log
+    done
+
+fi
 
 echo 
 echo "Results:"
