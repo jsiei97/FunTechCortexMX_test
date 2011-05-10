@@ -57,6 +57,9 @@ test03.o: test03/test03.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) -o test03.o $<
 
+test04.o: test04/test04.c
+	@ echo ".compiling"
+	$(CC) $(CFLAGS) -o test04.o $<
 
 
 
