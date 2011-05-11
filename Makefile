@@ -47,19 +47,51 @@ startup_stm32f10x.o: src/startup_stm32f10x.s
 #
 test01.o: test01/test01.c 
 	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o test01.o test01/test01.c
+	$(CC) $(CFLAGS) -o $@ $<
 
 test02.o: test02/test02.c
 	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o test02.o $<
+	$(CC) $(CFLAGS) -o $@ $<
 
 test03.o: test03/test03.c
 	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o test03.o $<
+	$(CC) $(CFLAGS) -o $@ $<
 
 test04.o: test04/test04.c
 	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o test04.o $<
+	$(CC) $(CFLAGS) -o $@ $<
+
+
+#
+# OBJ from Error tests, to play with error handling
+#
+error01.o: error01/error01.c
+	@ echo ".compiling"
+	$(CC) $(CFLAGS) -o $@ $<
+
+error02.o: error02/error02.c
+	@ echo ".compiling"
+	$(CC) $(CFLAGS) -o $@ $<
+
+error03.o: error03/error03.c
+	@ echo ".compiling"
+	$(CC) $(CFLAGS) -o $@ $<
+
+error04.o: error04/error04.c
+	@ echo ".compiling"
+	$(CC) $(CFLAGS) -o $@ $<
+
+error05.o: error05/error05.c
+	@ echo ".compiling"
+	$(CC) $(CFLAGS) -o $@ $<
+
+error06.o: error06/error06.c
+	@ echo ".compiling"
+	$(CC) $(CFLAGS) -o $@ $<
+
+error07.o: error07/error07.c
+	@ echo ".compiling"
+	$(CC) $(CFLAGS) -o $@ $<
 
 
 
@@ -69,7 +101,7 @@ flash: all
 
 .PHONY: clean 
 clean:
-	-rm -f main.o startup_stm32f10x.o test*.o 
+	-rm -f main.o startup_stm32f10x.o test*.o error*.o
 	-rm -f main.lst main.elf main.bin startup_stm32f10x.lst 
 
 .PHONY: clean_all
