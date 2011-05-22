@@ -1,3 +1,6 @@
+
+#include "main.h"
+
 void test_failed(int number) {
     while(1);
 }
