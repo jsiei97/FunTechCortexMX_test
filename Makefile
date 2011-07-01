@@ -14,20 +14,20 @@ LFLAGS  = -Tsrc/stm32.ld -nostartfiles $(MCUFLAGS) -mfix-cortex-m3-ldrd
 CPFLAGS = -Obinary
 ODFLAGS = -S
 
-all: test
+all: main.bin
 
 
 #TEST := test01
 TEST = ""
 
-test: main.elf
+main.bin: main.elf
 	@ echo "...copying"
 	$(CP) $(CPFLAGS) main.elf main.bin
 	$(OD) $(ODFLAGS) main.elf > main.lst
 
-main.elf: src/stm32.ld main.o startup_stm32f10x.o $(TEST).o
+main.elf: src/stm32.ld main.o nvic.o $(TEST).o
 	@ echo "..linking"
-	$(LD) $(LFLAGS) -o main.elf main.o startup_stm32f10x.o $(TEST).o
+	$(LD) $(LFLAGS) -o $@ main.o nvic.o $(TEST).o
 
 
 pc: main.o $(TEST).o
@@ -41,9 +41,14 @@ main.o: src/main.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) src/main.c
 
-startup_stm32f10x.o: src/startup_stm32f10x.s
-	@ echo ".assembling"
-	$(AS) $(AFLAGS) -o startup_stm32f10x.o src/startup_stm32f10x.s > startup_stm32f10x.lst
+nvic.o: src/nvic.c
+	@ echo ".compiling"
+	$(CC) $(CFLAGS) -o $@ $<
+	$(OD) $(ODFLAGS) $@ > nvic.lst
+
+#startup_stm32f10x.o: src/startup_stm32f10x.s
+#	@ echo ".assembling"
+#	$(AS) $(AFLAGS) -o startup_stm32f10x.o src/startup_stm32f10x.s > startup_stm32f10x.lst
 
 
 #
@@ -105,8 +110,8 @@ flash: all
 
 .PHONY: clean 
 clean:
-	-rm -f main.o startup_stm32f10x.o test*.o error*.o
-	-rm -f main.lst main.elf main.bin startup_stm32f10x.lst 
+	-rm -f main.o nvic.* test*.o error*.o
+	-rm -f main.lst main.elf main.bin 
 
 .PHONY: clean_all
 clean_all: clean

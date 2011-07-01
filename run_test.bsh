@@ -94,7 +94,8 @@ echo
 echo "Results:"
 echo " OK:   "`grep test_success    log.test*.txt | grep Breakpoint | wc -l`
 echo " FAIL  "`grep test_failed     log.test*.txt | grep Breakpoint | wc -l`
-echo " Err   "`grep Default_Handler log.test*.txt | grep Breakpoint | wc -l`
+#echo " Err   "`grep Default_Handler log.test*.txt | grep Breakpoint | wc -l`
+echo " Err   "`grep 'signal SIGTRAP' log.test*.txt | wc -l`
 echo 
 
 for f in $( ls -1 log.test*.txt );
@@ -109,7 +110,7 @@ do
         echo $f" - FAIL"
     fi
 
-    if [ "`grep Default_Handler $f | grep Breakpoint | wc -l`" = "1" ]
+    if [ "`grep 'signal SIGTRAP' $f | wc -l`" = "1" ]
     then 
         echo $f" - Error"
     fi

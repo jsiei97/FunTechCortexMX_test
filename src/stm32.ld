@@ -2,14 +2,14 @@ MEMORY
 {
     ram    (rwx) : ORIGIN = 0x20000000, LENGTH = 20k
     rom    (rx)  : ORIGIN = 0x00000000, LENGTH = 128K
-	RSTACK (rw)  : ORIGIN = 0x20004D00, LENGTH = 0x0300
+	RSTACK (rw)  : ORIGIN = 0x20004FFC, LENGTH = 0x0300
 }
 SECTIONS
 {
     .  = 0x0;           /* From 0x00000000 */
     .text : 
     {
-        *(.isr_vector)  /* Vector table */
+        *(.nvic_vector)  /* Vector table */
         *(.text.*)      /* Program code */
         *(.text)        /* Program code */
         *(.rodata)      /* Read only data */
@@ -29,7 +29,7 @@ SECTIONS
 	_end = .;
 	PROVIDE (end = .);
 
-	.stack (NOLOAD) :
+    .stack (NOLOAD) :
 	{
 		/* Have stack in a section of is own. This becomes system root stack */
 		/* Having above _end makes sure Newlib heap doesn't smash it */
