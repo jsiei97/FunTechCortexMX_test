@@ -15,6 +15,7 @@ int start_test()
     char str [20];
     int value;
 
+    //Try to find a word and then a number in the "sentence"
     sscanf (sentence,"%s %x",str ,&value);
     //printf ("%s -> 0x%x %d\n",str,i,i);
 

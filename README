@@ -42,3 +42,8 @@ frame
 
 arm-none-eabi-gdb --batch --command=res/commands.gdb main.elf
 
+
+To test some things on a pc you can try:
+make pc CC=gcc CFLAGS="-I./ -c -g -O0" LD=gcc LFLAGS="" TEST=test01
+gdb main.elf --eval-command="break test_success" --eval-command="break test_failed" 
+

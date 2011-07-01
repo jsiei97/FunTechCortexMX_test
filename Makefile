@@ -7,7 +7,7 @@ OD      = arm-none-eabi-objdump
 
 MCUFLAGS = -mcpu=cortex-m3 -mthumb 
 
-CFLAGS  =  -I./ -c -fno-common -O0 -g $(MCUFLAGS) -mfix-cortex-m3-ldrd
+CFLAGS  = -I./ -c -fno-common -O0 -g $(MCUFLAGS) -mfix-cortex-m3-ldrd
 AFLAGS  = -ahls $(MCUFLAGS) 
 LFLAGS  = -Tsrc/stm32.ld -nostartfiles $(MCUFLAGS) -mfix-cortex-m3-ldrd
 
@@ -29,6 +29,10 @@ main.elf: src/stm32.ld main.o startup_stm32f10x.o $(TEST).o
 	@ echo "..linking"
 	$(LD) $(LFLAGS) -o main.elf main.o startup_stm32f10x.o $(TEST).o
 
+
+pc: main.o $(TEST).o
+	@ echo "..linking"
+	$(LD) -o main.elf main.o $(TEST).o
 
 # 
 # OBJ
