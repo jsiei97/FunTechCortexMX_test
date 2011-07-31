@@ -45,6 +45,7 @@ then
     #xterm -e "openocd -f res/openocd.cfg" &
 
     xterm -e "openocd -f $cfg_port -f $cfg_interface -f $cfg_target -s $cfg_path" &
+    #openocd -f $cfg_port -f $cfg_interface -f $cfg_target -s $cfg_path &
 
     #openocd -f res/openocd.cfg --log_output log.OpenOCD.server &
 
