@@ -1,6 +1,6 @@
 MEMORY
 {
-    ram    (rwx) : ORIGIN = 0x20000000, LENGTH = 20k
+    ram    (rwx) : ORIGIN = 0x20000000, LENGTH = 20K
     rom    (rx)  : ORIGIN = 0x00000000, LENGTH = 128K
 	RSTACK (rw)  : ORIGIN = 0x20004FFC, LENGTH = 0x0300
 }
@@ -9,7 +9,7 @@ SECTIONS
     .  = 0x0;           /* From 0x00000000 */
     .text : 
     {
-        *(.nvic_vector)  /* Vector table */
+        *(.nvic_vector) /* Vector table */
         *(.text.*)      /* Program code */
         *(.text)        /* Program code */
         *(.rodata)      /* Read only data */

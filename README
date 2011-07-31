@@ -13,6 +13,13 @@ scripts/start_server.bsh
 make TEST=test03 flash 
 ddd --eval-command="target remote localhost:3333" --debugger arm-none-eabi-gdb  main.elf
 
+To test some things on a pc you can try:
+make pc CC=gcc CFLAGS="-I./ -c -g -O0 -DDEBUG_QUIT" LD=gcc LFLAGS="" TEST=test01
+
+And then run with 
+./main.elf
+gdb main.elf --eval-command="break test_success" --eval-command="break test_failed" 
+ddd main.elf --eval-command="break test_success" --eval-command="break test_failed" 
 
 
 Ignore the rest of this file...
@@ -41,9 +48,4 @@ cont
 frame
 
 arm-none-eabi-gdb --batch --command=res/commands.gdb main.elf
-
-
-To test some things on a pc you can try:
-make pc CC=gcc CFLAGS="-I./ -c -g -O0" LD=gcc LFLAGS="" TEST=test01
-gdb main.elf --eval-command="break test_success" --eval-command="break test_failed" 
 

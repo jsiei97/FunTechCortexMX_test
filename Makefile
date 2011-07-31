@@ -70,6 +70,10 @@ test04.o: test04/test04.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) -o $@ $<
 
+test05.o: test05/test05.c
+	@ echo ".compiling"
+	$(CC) $(CFLAGS) -o $@ $<
+
 
 #
 # OBJ from Error tests, to play with error handling

@@ -1,9 +1,44 @@
 #!/bin/bash 
 
+#cfg_path="/usr/share/openocd/scripts/"
+cfg_path="/usr/local/share/openocd/scripts/"
+cfg_port="res/openocd_ports.cfg"
+cfg_interface=$cfg_path"interface/olimex-arm-usb-ocd.cfg"
+#cfg_target=$cfg_path"target/lpc1768.cfg"
+#cfg_target=$cfg_path"target/stm32.cfg"
+cfg_target=$cfg_path"board/olimex_stm32_h103.cfg"
+
+if [ ! -d $cfg_path ] 
+then 
+    echo "Error cfg_path" $cfg_path
+    exit 1
+fi
+
+if [ ! -f $cfg_port ] 
+then 
+    echo "Error cfg_port" $cfg_port
+    exit 1
+fi
+
+if [ ! -f $cfg_interface ] 
+then 
+    echo "Error cfg_interface" $cfg_interface
+    exit 1
+fi
+
+if [ ! -f $cfg_target ] 
+then 
+    echo "Error cfg_target" $cfg_target
+    exit 1
+fi
+
 if [ `ps -A | grep openocd | wc -l` = 0 ]
 then
     echo "Start the OpenOCD server"
-    xterm -e "openocd -f res/openocd.cfg" &
+    #xterm -e "openocd -f res/openocd.cfg" &
+
+    xterm -e "openocd -f $cfg_port -f $cfg_interface -f $cfg_target -s $cfg_path" &
+
     #openocd -f res/openocd.cfg --log_output log.OpenOCD.server &
 
     sleep 5
