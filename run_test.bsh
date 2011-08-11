@@ -11,6 +11,51 @@ function did_it_work {
     fi
 }
 
+function start_server {
+    scripts/start_server.bsh 
+    did_it_work $?
+
+    make clean_all
+    # No check.
+}
+
+
+function start_one_test {
+    CWD=`pwd`
+
+    if [ ! -d $1 ]
+    then
+        echo "Fail no valid dir: "$1
+        exit 1
+    fi
+
+    test=`echo $1 | tr -d '/'`
+    #Run one test
+    log=$CWD/log.$test.txt
+    run_test $test $log
+}
+
+function start_all_tests {
+    CWD=`pwd`
+
+    for f in $( ls -1 -d test* );
+    do
+        log=$CWD/log.$f.txt
+        run_test $f $log
+    done
+}
+
+function start_error_tests {
+    CWD=`pwd`
+
+    for f in $( ls -1 -d error* );
+    do
+        log=$CWD/log.$f.txt
+        run_test $f $log
+    done
+}
+
+
 function run_test {
     tes=$1
     log=$2
@@ -45,60 +90,65 @@ function run_test {
     echo ""
 }
 
-
-if [ "$1" = "--help" ]
-then
+function usage {
     echo "Usage:"
-    echo $0"        - run all tests"
-    echo $0" test03 - run test03 aka test03/test03.c"
-    exit 0;
+    #echo $0"        - run all tests"
+    #echo $0" test03 - run test03 aka test03/test03.c"
+
+    # getopt
+    echo $0" -a        - all tests, default"
+    echo $0" -c        - cleanup"
+    echo $0" -e        - error tests"
+    echo $0" -t test03 - run one test, i.e. test03 aka test03/test03.c"
+}
+
+
+
+# Do not allow "no args"
+if [ -z $* ]
+then
+    usage
+    exit 1
 fi
 
+#
+# Use getopt to check the args
+# http://aplawrence.com/Unix/getopts.html
+#
+args=`getopt aceht: $*`
+if test $? != 0
+then
+    usage
+    exit 1
+fi
+set -- $args
+for i
+do
+    case "$i" in
+        -a) shift;echo "Run all tests"  ;start_server;start_all_tests;;
+        -e) shift;echo "Run error tests";start_server;start_error_tests;;
+        -t) shift;echo "Run test: $1"   ;start_server;start_one_test $1;shift;;
+        -c) shift;echo "Cleanup...";make clean_all;exit 0;;
+        -h) shift                  ;usage         ;exit 0;;
+    esac
+done
 
-CWD=`pwd`
+
+
 
 #source ~/stm32/bin/stm32_setup.sh 
 #did_it_work $?
 
 
-scripts/start_server.bsh 
-did_it_work $?
-
-make clean_all
-# No check.
-
-if [ $1 ]
-then
-    if [ ! -d $1 ]
-    then
-        echo "Fail no valid dir..."
-        exit 1
-    fi
-
-    test=`echo $1 | tr -d '/'`
-    #Run one test
-    log=$CWD/log.$test.txt
-    run_test $test $log
-
-else
-    #for f in $(find -name *.c | sed 's/\.\/\(test[0-9][0-9]\).*/\1/');
-    for f in $( ls -1 -d test* );
-    do
-        log=$CWD/log.$f.txt
-        run_test $f $log
-    done
-
-fi
-
 echo 
 echo "Results:"
-echo " OK:   "`grep test_success    log.test*.txt | grep Breakpoint | wc -l`
-echo " FAIL  "`grep test_failed     log.test*.txt | grep Breakpoint | wc -l`
+echo " OK:   "`grep test_success    log.*.txt | grep Breakpoint | wc -l`
+echo " FAIL  "`grep test_failed     log.*.txt | grep Breakpoint | wc -l`
 #echo " Err   "`grep Default_Handler log.test*.txt | grep Breakpoint | wc -l`
-echo " Err   "`grep 'signal SIGTRAP' log.test*.txt | wc -l`
+echo " Err   "`grep 'signal SIGTRAP' log.*.txt | wc -l`
 echo 
 
-for f in $( ls -1 log.test*.txt );
+for f in $( ls -1 log.*.txt );
 do
     if [ "`grep test_success $f | grep Breakpoint | wc -l`" = "1" ]
     then 
