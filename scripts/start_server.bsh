@@ -52,6 +52,11 @@ then
     sleep 5
 fi
 
+#Did it start? 
+if [ `ps -A | grep openocd | wc -l` = 0 ]
+then
+    exit 1
+fi
 
 # kill `ps -A | grep openocd | awk '{print $1}'`
 
