@@ -1,0 +1,17 @@
+/**
+ * STM32-H103 => STM32F103RBT6 
+ *  F   = general-purpose
+ *  103 = performance line
+ *  R   = 64 pins
+ *  B   = 128 Kbytes of Flash memory
+ *  T   = LQFP
+ *  6   = Industrial temperature range, –40 to 85 °C
+ *
+ * STM32F103Rx has 20 Kbytes of SRAM
+ */
+MEMORY
+{
+    ram    (rwx) : ORIGIN = 0x20000000, LENGTH = 20K
+    rom    (rx)  : ORIGIN = 0x00000000, LENGTH = 128K
+	RSTACK (rw)  : ORIGIN = 0x20004FFC, LENGTH = 0x0300
+}
