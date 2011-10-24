@@ -6,8 +6,10 @@ CP      = arm-none-eabi-objcopy
 OD      = arm-none-eabi-objdump
 
 MCUFLAGS = -mcpu=cortex-m3 -mthumb 
+DEBUGFLAGS = -O0 -g
+#DEBUGFLAGS = -O2
 
-CFLAGS  = -I./ -c -fno-common -O0 -g $(MCUFLAGS) -mfix-cortex-m3-ldrd
+CFLAGS  = -I./ -c -fno-common $(DEBUGFLAGS) $(MCUFLAGS) -mfix-cortex-m3-ldrd
 AFLAGS  = -ahls $(MCUFLAGS) 
 LFLAGS  = -Tsrc/stm32.ld -nostartfiles $(MCUFLAGS) -mfix-cortex-m3-ldrd
 
