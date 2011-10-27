@@ -112,6 +112,7 @@ error07.o: error07/error07.c
 
 .PHONY: flash
 flash: all
+	scripts/start_server.bsh
 	scripts/do_flash.pl main.bin
 
 .PHONY: clean 
