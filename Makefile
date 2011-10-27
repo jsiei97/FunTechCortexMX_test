@@ -115,6 +115,11 @@ flash: all
 	scripts/start_server.bsh
 	scripts/do_flash.pl main.bin
 
+.PHONY: ddd
+ddd: flash 
+	ddd --eval-command="target remote localhost:3333" --debugger arm-none-eabi-gdb  main.elf
+
+
 .PHONY: clean 
 clean:
 	-rm -f main.o nvic.* test*.o error*.o
