@@ -10,6 +10,7 @@ include make_$(TARGET).mk
 TEST := test01
 #TEST = ""
 
+# OBJ from Tests
 include $(TEST)/make.mk
 
 main.bin: main.elf
@@ -28,32 +29,6 @@ main.elf: $(LINKFILE) $(OBJ)
 main.o: src/main.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) src/main.c
-
-
-#startup_stm32f10x.o: src/startup_stm32f10x.s
-#	@ echo ".assembling"
-#	$(AS) $(AFLAGS) -o startup_stm32f10x.o src/startup_stm32f10x.s > startup_stm32f10x.lst
-
-
-#
-# OBJ from Tests
-#
-
-test02.o: test02/test02.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
-
-test03.o: test03/test03.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
-
-test04.o: test04/test04.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
-
-test05.o: test05/test05.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
 
 
 #

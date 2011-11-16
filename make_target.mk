@@ -23,3 +23,6 @@ nvic.o: src/nvic.c
 	$(CC) $(CFLAGS) -o $@ $<
 	$(OD) $(ODFLAGS) $@ > nvic.lst
 
+#startup_stm32f10x.o: src/startup_stm32f10x.s
+#	@ echo ".assembling"
+#	$(AS) $(AFLAGS) -o startup_stm32f10x.o src/startup_stm32f10x.s > startup_stm32f10x.lst
