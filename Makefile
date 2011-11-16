@@ -22,45 +22,10 @@ main.elf: $(LINKFILE) $(OBJ)
 	@ echo "..linking"
 	$(LD) $(LFLAGS) -o $@ $(OBJ)
 
-
-# 
-# OBJ
-#
 main.o: src/main.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) src/main.c
 
-
-#
-# OBJ from Error tests, to play with error handling
-#
-error01.o: error01/error01.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
-
-error02.o: error02/error02.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
-
-error03.o: error03/error03.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
-
-error04.o: error04/error04.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
-
-error05.o: error05/error05.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
-
-error06.o: error06/error06.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
-
-error07.o: error07/error07.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
 
 
 
