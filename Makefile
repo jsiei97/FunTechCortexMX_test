@@ -90,7 +90,13 @@ error07.o: error07/error07.c
 
 .PHONY: flash
 flash: all
+	scripts/start_server.bsh
 	scripts/do_flash.pl main.bin
+
+.PHONY: ddd
+ddd: flash 
+	ddd --eval-command="target remote localhost:3333" --debugger arm-none-eabi-gdb  main.elf
+
 
 .PHONY: clean 
 clean:

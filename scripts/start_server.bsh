@@ -1,5 +1,14 @@
 #!/bin/bash 
 
+#First a check if OpenOCD is installed.
+which openocd 
+if [ "$?" != "0" ]
+then
+    echo "OpenOCD is not in the path" 
+    exit 1
+fi
+
+#Then where is it installed? 
 if [ -d /usr/local/share/openocd/ ]
 then
     echo "Using local openocd install"
@@ -10,11 +19,42 @@ else
 fi
 
 cfg_port="res/openocd_ports.cfg"
-cfg_interface=$cfg_path"interface/olimex-arm-usb-ocd.cfg"
+
+
+#What jtag is connected?
+#Olimex jtag?
+lsusb -d 15ba:0003
+if [ "$?" == "0" ]
+then
+    echo "Found: ID 15ba:0003 Olimex Ltd. OpenOCD JTAG"
+    cfg_interface=$cfg_path"interface/olimex-arm-usb-ocd.cfg"
+fi
+
+#Flyswatter jtag?
+lsusb -d 0403:6010
+if [ "$?" == "0" ]
+then
+    echo "Found: ID 0403:6010 Future Technology Devices International, Ltd FT2232C Dual USB-UART/FIFO IC"
+    cfg_interface=$cfg_path"interface/flyswatter.cfg"
+fi
+
+#And stop right here if we don't have one
+if [ "$cfg_interface" == "" ]
+then
+    echo "No jtag found"
+    exit 1
+fi
+
+
+# Then it is hard to guess what target we have connected to the jtag, 
+# so that is something you need to add yourself...
+
 #cfg_target=$cfg_path"target/lpc1768.cfg"
 #cfg_target=$cfg_path"target/stm32.cfg"
 cfg_target=$cfg_path"board/olimex_stm32_h103.cfg"
 
+
+# Then check so the different config files can be found on the system.
 if [ ! -d $cfg_path ] 
 then 
     echo "Error cfg_path" $cfg_path
@@ -39,6 +79,7 @@ then
     exit 1
 fi
 
+# If the server is not running, then we start it.
 if [ `ps -A | grep openocd | wc -l` = 0 ]
 then
     echo "Start the OpenOCD server"
@@ -49,6 +90,7 @@ then
 
     #openocd -f res/openocd.cfg --log_output log.OpenOCD.server &
 
+    # Then wait some time so OpenOCD has some time to configure the jtag.
     sleep 5
 fi
 
@@ -60,4 +102,5 @@ fi
 
 # kill `ps -A | grep openocd | awk '{print $1}'`
 
+echo "OpenOCD should be running now."
 exit 0
