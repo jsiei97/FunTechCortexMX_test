@@ -11,15 +11,15 @@ DEBUGFLAGS = -O0 -g
 
 CFLAGS  = -I./ -c -fno-common $(DEBUGFLAGS) $(MCUFLAGS) -mfix-cortex-m3-ldrd
 AFLAGS  = -ahls $(MCUFLAGS) 
-LFLAGS  = -Tsrc/stm32.ld -nostartfiles $(MCUFLAGS) -mfix-cortex-m3-ldrd
+LINKFILE = src/stm32.ld
+LFLAGS  = -T$(LINKFILE) -nostartfiles $(MCUFLAGS) -mfix-cortex-m3-ldrd
 
 CPFLAGS = -Obinary
 ODFLAGS = -S
-
-LINKFILE = src/stm32.ld
 
 OBJ += nvic.o 
 nvic.o: src/nvic.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) -o $@ $<
 	$(OD) $(ODFLAGS) $@ > nvic.lst
+

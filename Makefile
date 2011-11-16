@@ -3,7 +3,8 @@ all: main.bin
 
 OBJ = main.o  
 
-TARGET = pc
+TARGET = target
+#TARGET = pc
 include make_$(TARGET).mk
 
 TEST := test01
