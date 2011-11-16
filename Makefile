@@ -1,40 +1,25 @@
-CC      = arm-none-eabi-gcc
-LD      = arm-none-eabi-gcc 
-AR      = arm-none-eabi-ar
-AS      = arm-none-eabi-as
-CP      = arm-none-eabi-objcopy
-OD      = arm-none-eabi-objdump
-
-MCUFLAGS = -mcpu=cortex-m3 -mthumb 
-DEBUGFLAGS = -O0 -g
-#DEBUGFLAGS = -O2
-
-CFLAGS  = -I./ -c -fno-common $(DEBUGFLAGS) $(MCUFLAGS) -mfix-cortex-m3-ldrd
-AFLAGS  = -ahls $(MCUFLAGS) 
-LFLAGS  = -Tsrc/stm32.ld -nostartfiles $(MCUFLAGS) -mfix-cortex-m3-ldrd
-
-CPFLAGS = -Obinary
-ODFLAGS = -S
 
 all: main.bin
 
+OBJ = main.o  
 
-#TEST := test01
-TEST = ""
+TARGET = pc
+include make_$(TARGET).mk
+
+TEST := test01
+#TEST = ""
+
+include $(TEST)/make.mk
 
 main.bin: main.elf
 	@ echo "...copying"
 	$(CP) $(CPFLAGS) main.elf main.bin
 	$(OD) $(ODFLAGS) main.elf > main.lst
 
-main.elf: src/stm32.ld main.o nvic.o $(TEST).o
+main.elf: $(LINKFILE) $(OBJ) 
 	@ echo "..linking"
-	$(LD) $(LFLAGS) -o $@ main.o nvic.o $(TEST).o
+	$(LD) $(LFLAGS) -o $@ $(OBJ)
 
-
-pc: main.o $(TEST).o
-	@ echo "..linking"
-	$(LD) -o main.elf main.o $(TEST).o
 
 # 
 # OBJ
@@ -43,10 +28,6 @@ main.o: src/main.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) src/main.c
 
-nvic.o: src/nvic.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
-	$(OD) $(ODFLAGS) $@ > nvic.lst
 
 #startup_stm32f10x.o: src/startup_stm32f10x.s
 #	@ echo ".assembling"
@@ -56,9 +37,6 @@ nvic.o: src/nvic.c
 #
 # OBJ from Tests
 #
-test01.o: test01/test01.c 
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
 
 test02.o: test02/test02.c
 	@ echo ".compiling"
@@ -116,7 +94,8 @@ flash: all
 
 .PHONY: clean 
 clean:
-	-rm -f main.o nvic.* test*.o error*.o
+	-rm -f $(OBJ)
+	-rm -f nvic.* test*.o error*.o
 	-rm -f main.lst main.elf main.bin 
 
 .PHONY: clean_all
