@@ -14,7 +14,7 @@ make TEST=test03 flash
 ddd --eval-command="target remote localhost:3333" --debugger arm-none-eabi-gdb  main.elf
 
 To test some things on a pc you can try:
-make pc CC=gcc CFLAGS="-I./ -c -g -O0 -DDEBUG_QUIT" LD=gcc LFLAGS="" TEST=test01
+make TARGET=pc TEST=test01
 
 And then run with 
 ./main.elf

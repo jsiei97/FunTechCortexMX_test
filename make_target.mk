@@ -9,7 +9,7 @@ MCUFLAGS = -mcpu=cortex-m3 -mthumb
 DEBUGFLAGS = -O0 -g
 #DEBUGFLAGS = -O2
 
-CFLAGS  = -I./ -c -fno-common $(DEBUGFLAGS) $(MCUFLAGS) -mfix-cortex-m3-ldrd
+CFLAGS  = -Wall -Wextra -I./ -c -fno-common $(DEBUGFLAGS) $(MCUFLAGS) -mfix-cortex-m3-ldrd -DUNITY_OUTPUT_PRINT_RING
 AFLAGS  = -ahls $(MCUFLAGS) 
 LINKFILE = src/stm32.ld
 LFLAGS  = -T$(LINKFILE) -nostartfiles $(MCUFLAGS) -mfix-cortex-m3-ldrd
@@ -18,7 +18,7 @@ CPFLAGS = -Obinary
 ODFLAGS = -S
 
 OBJ += nvic.o 
-nvic.o: src/nvic.c
+nvic.o: src/nvic.c src/main.c 
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) -o $@ $<
 	$(OD) $(ODFLAGS) $@ > nvic.lst

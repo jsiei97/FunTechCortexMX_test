@@ -1,12 +1,10 @@
-
 #ifndef  __MAIN_H
 #define  __MAIN_H
 
 
-int main(void);
+int main(int argc, char * argv[]);
 
-void test_failed(int number);
-void test_success(int number);
-
+void test_success();
+void test_failed();
 
 #endif  // __MAIN_H 

@@ -10,6 +10,10 @@ include make_$(TARGET).mk
 TEST := test01
 #TEST = ""
 
+# Build Unity
+include print_ring/make.mk
+include unity/make.mk
+
 # OBJ from Tests
 include $(TEST)/make.mk
 
@@ -26,6 +30,7 @@ main.elf: $(LINKFILE) $(OBJ)
 # 
 # OBJ
 #
+CFLAGS  += -Isrc/
 main.o: src/main.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) src/main.c
