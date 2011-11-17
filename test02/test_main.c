@@ -16,19 +16,17 @@ TEST_TEAR_DOWN(GroupName)
     //clean up steps are executed after each TEST
 }
 
+
 /**
- * Test that normal ints work on the system.
+ * Start test with float:s
  */
-TEST(GroupName, BasicInt)
-{
-    int a = 0;
-    int b = 0;
+TEST(GroupName, BasicFloat)
+{    
+    float x = 2;
+    float y = 4;
 
-    a = 10;
-    b = 10;
-
-    TEST_ASSERT_EQUAL_INT( (a*b), 100);
-    TEST_ASSERT_EQUAL_INT( (a/b),   1);
+    TEST_ASSERT_EQUAL_FLOAT((x*y), 8);
+    TEST_ASSERT_EQUAL_FLOAT((y/x), 2);
 }
 
 
@@ -36,7 +34,7 @@ TEST(GroupName, BasicInt)
 TEST_GROUP_RUNNER(GroupName)
 {
     //Each TEST has a corresponding RUN_TEST_CASE
-    RUN_TEST_CASE(GroupName, BasicInt);
+    RUN_TEST_CASE(GroupName, BasicFloat);
     //RUN_TEST_CASE(GroupName, AnotherUniqueTestName);
 }
 
