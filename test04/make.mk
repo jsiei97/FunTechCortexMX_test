@@ -2,9 +2,9 @@
 CFLAGS  += -Itest04/
 
 #Include this obj
-OBJ += test04.o
+OBJ += test_main.o
 
-test04.o: test04/test04.c 
+test_main.o: test04/test_main.c 
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) -o $@ $<
 
