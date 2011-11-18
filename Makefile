@@ -53,3 +53,4 @@ clean:
 .PHONY: clean_all
 clean_all: clean
 	-rm -f log.*
+	-rm -f .gdb_history
