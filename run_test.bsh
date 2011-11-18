@@ -81,6 +81,14 @@ function run_test {
 
     mv gdb.txt $log
 
+    #extract print ring and attach it to the log.
+    ./print_ring/getLogg.pl main.elf printlog.txt
+    did_it_work $?
+
+    echo "" >> $log
+    cat printlog.txt >> $log
+    rm printlog.txt
+
     make clean
     did_it_work $?
 
@@ -144,8 +152,8 @@ echo
 echo "Results:"
 echo " OK:   "`grep test_success    log.*.txt | grep Breakpoint | wc -l`
 echo " FAIL  "`grep test_failed     log.*.txt | grep Breakpoint | wc -l`
-#echo " Err   "`grep Default_Handler log.test*.txt | grep Breakpoint | wc -l`
-echo " Err   "`grep 'signal SIGTRAP' log.*.txt | wc -l`
+echo " Err   "`grep Default_Handler log.*.txt | grep Breakpoint | wc -l`
+#echo " Err   "`grep 'signal SIGTRAP' log.*.txt | wc -l`
 echo 
 
 for f in $( ls -1 log.*.txt );
@@ -160,7 +168,7 @@ do
         echo $f" - FAIL"
     fi
 
-    if [ "`grep 'signal SIGTRAP' $f | wc -l`" = "1" ]
+    if [ "`grep Default_Handler $f | grep Breakpoint | wc -l`" = "1" ]
     then 
         echo $f" - Error"
     fi

@@ -1,8 +1,10 @@
-#!/usr/bin/perl -w 
-#use strict;
+#!/usr/bin/perl 
 
-$numArgs = $#ARGV + 1;
-if($numArgs != 3)
+use strict;
+use warnings;
+
+my $numArgs = $#ARGV + 1;
+if($numArgs != 2)
 {
     die("Wrong number of args ".$numArgs ."\n");
 }
@@ -10,18 +12,24 @@ if($numArgs != 3)
 print "getLogg\n";
 
 # The program that caused the crash
-$exec = $ARGV[0];
-
-# The core dump file
-$core = $ARGV[1];
+my $elfFile = $ARGV[0];
 
 # Save output into this file
-$filename = $ARGV[2];
+my $filename = $ARGV[1];
 
 
-$str = "gdb --batch --command=commands.gdb --core=".$core." ".$exec;
+my $str = "arm-none-eabi-gdb ".
+    "--eval-command=\"target remote localhost:3333\" ".
+    #"--eval-command=\"set logging on\" ".
+    "--batch --command=print_ring/commands.gdb ".
+    $elfFile;
+
 print "Let's run gdb: ".$str."\n";
 open(DATA, $str." 2>&1 |") || die "Failed: $!\n";
+
+my $pos;
+my $max;
+my $buf;
 
 while ( defined( my $line = <DATA> )  ) {
 #chomp($line);
@@ -53,19 +61,23 @@ print "* \$3 buf = ".$buf." \n";
 if($buf =~ s/\\000/___000___/g) {
     print "* \$3 = ".$buf." \n";
 }
-if($buf =~ s/((\\n)|(\\r)|(\\t))/ /g) {
+# Find the newlines and change them into the split sequence ___000___
+if($buf =~ s/\\n/___000___/g) {
     print "* \$3 = ".$buf." \n";
 }
 
+#if($buf =~ s/((\\n)|(\\r)|(\\t))/ /g) {
+#    print "* \$3 = ".$buf." \n";
+#}
 
 my @values = split('___000___', $buf);
 
-$numberOfLines = @values;
+my $numberOfLines = @values;
 print "numberOfLines ".$numberOfLines."\n" ;
 
-$len=0;
-$i=0;
-$mark = 0;
+my $len=0;
+my $i=0;
+my $mark = 0;
 foreach my $subLine (@values) {
 
     $len += (length ($subLine)+1);
@@ -103,7 +115,4 @@ if($mark != 0) {
 print FILEH "\n-----\nEND\n";
 close(FILEH);
 
-
-
-
-
+exit(0);
