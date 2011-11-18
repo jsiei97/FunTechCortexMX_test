@@ -2,6 +2,7 @@
 #include "main.h"
 #include "test_main.h"
 #include "unity_fixture.h"
+#include "print_ring.h"
 
 #ifdef DEBUG_QUIT
 #include "stdio.h"

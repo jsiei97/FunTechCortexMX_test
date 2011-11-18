@@ -36,7 +36,7 @@ void insertChar(char c)
 
 void print_ring_print(char* data)
 {
-    int i = 0;
+    unsigned int i = 0;
     for(i=0; i<strlen(data);i++)
     {
         //printf("%c", test[i]);
