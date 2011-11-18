@@ -5,6 +5,7 @@
 
 void reset_buffer();
 void insertChar(char c);
+int UNITY_OUTPUT_CHAR(int character);
 void print_ring_print(char* data);
 
 

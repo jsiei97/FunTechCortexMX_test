@@ -150,7 +150,7 @@ typedef UNITY_DOUBLE_TYPE _UD;
 // Output Method
 //-------------------------------------------------------
 #ifdef UNITY_OUTPUT_PRINT_RING
-#define UNITY_OUTPUT_CHAR(a) insertChar(a)
+#define UNITY_OUTPUT_CHAR(a) UNITY_OUTPUT_CHAR(a) 
 #endif
 
 #ifndef UNITY_OUTPUT_CHAR

@@ -313,7 +313,7 @@ int UnityGetCommandLineOptions(int argc, char* argv[])
     UnityFixture.NameFilter = 0;
     UnityFixture.RepeatCount = 1;
 
-    /*
+#ifndef UNITY_IGNORE_ARGS
     if (argc == 1)
         return 0;
 
@@ -354,7 +354,8 @@ int UnityGetCommandLineOptions(int argc, char* argv[])
             }
         }
     }
-    */
+#endif
+
     return 0;
 }
 

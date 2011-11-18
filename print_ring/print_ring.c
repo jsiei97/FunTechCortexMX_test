@@ -33,6 +33,11 @@ void insertChar(char c)
 
 }
 
+int UNITY_OUTPUT_CHAR(int character)
+{
+    insertChar((char)character);
+    return 0;
+}
 
 void print_ring_print(char* data)
 {
