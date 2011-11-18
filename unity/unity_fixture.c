@@ -116,6 +116,13 @@ void UnityTestRunner(unityfunction* setup,
     }
 }
 
+void UnityIgnoreTest()
+{
+    Unity.NumberOfTests++;
+    Unity.CurrentTestIgnored = 1;
+    UNITY_OUTPUT_CHAR('!');
+}
+
 
 //-------------------------------------------------
 //Malloc and free stuff
@@ -346,7 +353,6 @@ int UnityGetCommandLineOptions(int argc, char* argv[])
                 }
             }
         }
-        
     }
     */
     return 0;
@@ -374,3 +380,4 @@ void UnityConcludeFixtureTest()
     Unity.CurrentTestFailed = 0;
     Unity.CurrentTestIgnored = 0;
 }
+
