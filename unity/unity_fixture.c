@@ -31,7 +31,7 @@ void announceTestRun(int runNumber)
 int UnityMain(int argc, char* argv[], void (*runAllTests)())
 {
     int result = UnityGetCommandLineOptions(argc, argv);
-    int r;
+    unsigned int r;
     if (result != 0)
         return result;
 
