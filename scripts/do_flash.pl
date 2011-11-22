@@ -21,7 +21,8 @@ $telnet->open($ip);
 
 print $telnet->cmd('reset halt');
 print $telnet->cmd('flash probe 0');
-print $telnet->cmd('stm32x mass_erase 0');
+#print $telnet->cmd('stm32x mass_erase 0');
+print $telnet->cmd('stm32f1x mass_erase 0');
 print $telnet->cmd('flash write_bank 0 '.$file.' 0');
 print $telnet->cmd('reset halt');
 print $telnet->cmd('exit');
