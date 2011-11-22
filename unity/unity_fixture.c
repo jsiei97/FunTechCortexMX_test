@@ -142,6 +142,7 @@ void UnityMalloc_EndTest()
     malloc_fail_countdown = MALLOC_DONT_FAIL;
     if (malloc_count != 0)
     {
+        /// @bug Test dont fail, this is just a message. 
         TEST_FAIL_MESSAGE("This test leaks!");
     }
 }
