@@ -24,7 +24,10 @@ main.bin: main.elf
 
 main.elf: $(LINKFILE) $(OBJ) 
 	@ echo "..linking"
-	$(LD) $(LFLAGS) -o $@ $(OBJ)
+	$(LD) $(LFLAGS) -o $@ -Xlinker -Map=main.map $(OBJ)
+
+# Same data as with -Map=main.map but the file has a different syntax...
+#arm-none-eabi-nm -n -S main.elf > main.map
 
 CFLAGS  += -Isrc/
 main.o: src/main.c
@@ -54,3 +57,4 @@ clean:
 clean_all: clean
 	-rm -f log.*
 	-rm -f *.i
+	-rm -f *.map
