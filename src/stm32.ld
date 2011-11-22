@@ -21,10 +21,20 @@ SECTIONS
 
     .bss : 
     {
-        *(.bss)         /* Zero-filled run time allocate data memory */
+        /* Zero-filled run time allocate data memory */
+		_bss_begin = . ;
+		__bss_begin = . ;
+        PROVIDE (bss_begin = .);
+        *(.bss)         
+        *(.bss.*)
+        *(COMMON) 
+		_bss_end = . ;
+        PROVIDE (bss_end = .);
     } >ram AT > rom
 
+	end = .;
 	_end = .;
+	__end = .;
 	PROVIDE (end = .);
 
     .stack (NOLOAD) :

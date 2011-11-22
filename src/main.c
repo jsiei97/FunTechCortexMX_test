@@ -30,10 +30,20 @@ void test_success() {
 }
 
 
-
+extern size_t _bss_begin;
+extern size_t _bss_end;
+extern size_t _end;
 
 int main(int argc, char * argv[])
 {
+    // Please note that malloc needs the bss area to be clean.
+    size_t bss_begin = &_bss_begin;
+    size_t bss_end   = &_bss_end;
+    size_t bss_size  = bss_end - bss_begin;
+    memset(&_bss_begin, 0x00, bss_size);
+
+    size_t end   = &_end;
+
     reset_buffer();
     return UnityMain(argc, argv, runAllTests);
 
