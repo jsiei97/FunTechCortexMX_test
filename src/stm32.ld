@@ -29,13 +29,14 @@ SECTIONS
         *(.bss.*)
         *(COMMON) 
 		_bss_end = . ;
+		__bss_end = . ;
         PROVIDE (bss_end = .);
     } >ram AT > rom
 
 	end = .;
 	_end = .;
 	__end = .;
-	PROVIDE (end = .);
+	#PROVIDE (end = .);
 
     .stack (NOLOAD) :
 	{
