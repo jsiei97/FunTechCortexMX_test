@@ -33,10 +33,10 @@ SECTIONS
         PROVIDE (bss_end = .);
     } >ram AT > rom
 
-	end = .;
+	/* end = .; */
 	_end = .;
 	__end = .;
-	#PROVIDE (end = .);
+	PROVIDE (end = .); 
 
     .stack (NOLOAD) :
 	{

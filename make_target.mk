@@ -24,9 +24,15 @@ nvic.o: src/nvic.c src/main.c
 	$(OD) $(ODFLAGS) $@ > nvic.lst
 
 nvic.s: src/nvic.c src/main.c 
-	@ echo ".compiling"
+	@ echo ".asm"
 	$(CC) $(CFLAGS) -S -o $@ $<
 
 #startup_stm32f10x.o: src/startup_stm32f10x.s
 #	@ echo ".assembling"
 #	$(AS) $(AFLAGS) -o startup_stm32f10x.o src/startup_stm32f10x.s > startup_stm32f10x.lst
+
+OBJ += syscalls.o 
+syscalls.o: src/syscalls.c
+	@ echo ".compiling"
+	$(CC) $(CFLAGS) -o $@ $<
+

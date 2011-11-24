@@ -1,22 +1,25 @@
+#This dir
+DIR_UNITY = vendor/unity
+
 #Add this dir
-CFLAGS  += -Iunity/
+CFLAGS  += -I$(DIR_UNITY)/
 
 #Include this obj
 OBJ += unity.o unity_fixture.o
 
-unity.o: unity/unity.c
+unity.o: $(DIR_UNITY)/unity.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) -o $@ $<
 
-unity.i: unity/unity.c
+unity.i: $(DIR_UNITY)/unity.c
 	@ echo ".preprocessing"
 	$(CC) $(CFLAGS) -E -o $@ $<
 
-unity_fixture.o: unity/unity_fixture.c
+unity_fixture.o: $(DIR_UNITY)/unity_fixture.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) -o $@ $<
 
-unity_fixture.i: unity/unity_fixture.c
+unity_fixture.i: $(DIR_UNITY)/unity_fixture.c
 	@ echo ".preprocessing"
 	$(CC) $(CFLAGS) -E -o $@ $<
 

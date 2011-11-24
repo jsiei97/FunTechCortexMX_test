@@ -12,7 +12,7 @@ TEST := test01
 
 # Build Unity
 include print_ring/make.mk
-include unity/make.mk
+include vendor/unity/make.mk
 
 # OBJ from Tests
 include $(TEST)/make.mk
