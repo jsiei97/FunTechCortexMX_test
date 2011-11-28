@@ -87,6 +87,8 @@ then
 
     xterm -e "openocd -f $cfg_port -f $cfg_interface -f $cfg_target -s $cfg_path" &
     #openocd -f $cfg_port -f $cfg_interface -f $cfg_target -s $cfg_path &
+    OpenOCD_pid=$!
+    echo "pid: "$OpenOCD_pid
 
     #openocd -f res/openocd.cfg --log_output log.OpenOCD.server &
 
@@ -99,6 +101,9 @@ if [ `ps -A | grep openocd | wc -l` = 0 ]
 then
     exit 1
 fi
+
+#Now let's disconnect him.
+disown $OpenOCD_pid
 
 # kill `ps -A | grep openocd | awk '{print $1}'`
 
