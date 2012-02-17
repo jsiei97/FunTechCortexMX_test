@@ -1,52 +1,55 @@
-
 /* Include memory info for the STM32F103RBT6 chip */
 INCLUDE src/STM32F103RB.memory
 
 SECTIONS
 {
-    .  = 0x0;           /* From 0x00000000 */
-    .text : 
+    .nvic_vector : 
     {
-        *(.nvic_vector) /* Vector table */
-        *(.text.*)      /* Program code */
-        *(.text)        /* Program code */
-        *(.rodata)      /* Read only data */
+        *(vectors)    /* Vector table */
     } >rom
 
-    .  = 0x20000000;    /* From 0x20000000 */      
+    .text : 
+    {
+        *(.text)      /* Program code */
+        *(.text.*)
+        *(.rodata)    /* Read only data */
+        *(.rodata.*)        
+
+        . = ALIGN(4);
+        _DATAI_BEGIN = .;
+    } >rom
+
     .data : 
     {
-        *(.data)        /* Data memory */
-    } >ram AT > rom
+        . = ALIGN(4);
+        _DATA_BEGIN = .;
+        *(.data)      /* Data memory */
+        *(.data.*)        
+        _DATA_END = .;
+    } >ram AT >rom
 
-    .bss : 
+    .data_init : 
     {
-        /* Zero-filled run time allocate data memory */
-		_bss_begin = . ;
-		__bss_begin = . ;
-        PROVIDE (bss_begin = .);
-        *(.bss)         
+        _DATAI_END = .;
+    } >rom
+
+    .bss :
+    {
+        _BSS_BEGIN = .;
+        *(.bss)       /* Zero-filled run time allocate data memory */
         *(.bss.*)
-        *(COMMON) 
-		_bss_end = . ;
-		__bss_end = . ;
-        PROVIDE (bss_end = .);
-    } >ram AT > rom
+        *(COMMON)        
+        _BSS_END = .;
+    } >ram 
 
-	/* end = .; */
-	_end = .;
-	__end = .;
-	PROVIDE (end = .); 
+    .heap :
+    {
+        _HEAP = .;
+    } >ram
 
-    .stack (NOLOAD) :
-	{
-		/* Have stack in a section of is own. This becomes system root stack */
-		/* Having above _end makes sure Newlib heap doesn't smash it */
-		/* Do not PROVIDE symbols belo. Force code to define symbols */
-		_stack_start = . ;
-		*(stack)
-	} >RSTACK
-	. = ALIGN(4);
+    .stack :
+    {
+        _STACKTOP = .;
+    } >stack
 
-	_stack_end = . ;
 }  

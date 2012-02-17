@@ -1,3 +1,13 @@
+/**
+ * @file syscalls.c
+ * @author Johan Simonsson  
+ * @author Michael Fischer
+ * @brief newlib stub functions
+ *
+ * For more info see the newlib libc documentation about syscalls.
+ * http://sourceware.org/newlib/libc.html#Syscalls 
+ */
+
 /****************************************************************************
 *  Copyright (c) 2009 by Michael Fischer. All rights reserved.
 *
@@ -32,8 +42,12 @@
 *
 *  28.03.09  mifi   First Version, based on the original syscall.c from
 *                   newlib version 1.17.0
+* 
+*  17.02.12  Johan  Updated _sbrk_r
+*
 ****************************************************************************/
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
@@ -100,39 +114,30 @@ int _close_r (struct _reent *r, int file)
 
 /***************************************************************************/
 
+extern size_t _HEAP;
+
 /* Register name faking - works in collusion with the linker.  */
-register char * stack_ptr asm ("sp");
+//register char * stack_ptr asm ("sp");
 
 caddr_t _sbrk_r (struct _reent *r, int incr)
 {
-  extern char   end asm ("end"); /* Defined by the linker.  */
-  static char * heap_end;
-  char *        prev_heap_end;
+    static uint32_t heap_end;
+    uint32_t prev_heap_end = 0x0;
 
-  if (heap_end == NULL)
-    heap_end = & end;
-  
-  prev_heap_end = heap_end;
-  
-  if (heap_end + incr > stack_ptr)
-  {
-      /* Some of the libstdc++-v3 tests rely upon detecting
-        out of memory errors, so do not abort here.  */
-#if 0
-      extern void abort (void);
+    if (heap_end == 0)
+    {
+        heap_end = (uint32_t)&_HEAP;
+    }
 
-      _write (1, "_sbrk: Heap and stack collision\n", 32);
-      
-      abort ();
-#else
-      errno = ENOMEM;
-      return (caddr_t) -1;
-#endif
-  }
-  
-  heap_end += incr;
+    //if (heap_end + incr > stack_ptr)
+    //{
+        //return (caddr_t) -1;
+    //}
 
-  return (caddr_t) prev_heap_end;
+    prev_heap_end = heap_end;
+    heap_end += incr;
+
+    return (caddr_t) prev_heap_end;
 }
 
 /***************************************************************************/

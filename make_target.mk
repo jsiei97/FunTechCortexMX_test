@@ -1,11 +1,13 @@
 CC      = arm-none-eabi-gcc
-LD      = arm-none-eabi-gcc 
+LD      = arm-none-eabi-gcc
 AR      = arm-none-eabi-ar
 AS      = arm-none-eabi-as
 CP      = arm-none-eabi-objcopy
 OD      = arm-none-eabi-objdump
+NM      = arm-none-eabi-nm
+SIZE    = arm-none-eabi-size
 
-MCUFLAGS = -mcpu=cortex-m3 -mthumb 
+MCUFLAGS = -march=armv6t2 -mcpu=cortex-m3 -mthumb 
 DEBUGFLAGS = -O0 -g
 #DEBUGFLAGS = -O2
 
@@ -17,22 +19,12 @@ LFLAGS  = -T$(LINKFILE) -nostartfiles $(MCUFLAGS) -mfix-cortex-m3-ldrd -Xlinker 
 CPFLAGS = -Obinary
 ODFLAGS = -S
 
-OBJ += nvic.o 
-nvic.o: src/nvic.c src/main.c 
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) -o $@ $<
-	$(OD) $(ODFLAGS) $@ > nvic.lst
-
-nvic.s: src/nvic.c src/main.c 
-	@ echo ".asm"
-	$(CC) $(CFLAGS) -S -o $@ $<
-
-#startup_stm32f10x.o: src/startup_stm32f10x.s
-#	@ echo ".assembling"
-#	$(AS) $(AFLAGS) -o startup_stm32f10x.o src/startup_stm32f10x.s > startup_stm32f10x.lst
 
 OBJ += syscalls.o 
 syscalls.o: src/syscalls.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) -o $@ $<
 
+OBJ += low_level_init.o
+low_level_init.o: src/low_level_init.c
+	$(CC) $(CFLAGS) -o $@ $<

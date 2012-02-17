@@ -22,6 +22,8 @@ main.bin: main.elf
 	@ echo "...copying"
 	$(CP) $(CPFLAGS) main.elf main.bin
 	$(OD) $(ODFLAGS) main.elf > main.lst
+	$(NM) -n main.elf > main.symboltable
+	$(SIZE) main.elf > main.size
 
 main.elf: $(LINKFILE) $(OBJ) 
 	@ echo "..linking"
@@ -33,9 +35,9 @@ main.elf: $(LINKFILE) $(OBJ)
 CFLAGS  += -Isrc/
 main.o: src/main.c
 	@ echo ".compiling"
-	$(CC) $(CFLAGS) src/main.c
-
-
+	$(CC)    $(CFLAGS) src/main.c
+	$(CC) -S $(CFLAGS) src/main.c > main.s
+	$(CC) -E $(CFLAGS) src/main.c > main.pre
 
 
 .PHONY: flash
@@ -51,8 +53,10 @@ ddd: flash
 .PHONY: clean 
 clean:
 	-rm -f $(OBJ)
-	-rm -f nvic.* test*.o error*.o
+	-rm -f test*.o error*.o
 	-rm -f main.lst main.elf main.bin main.map
+	-rm -f main.symboltable main.size
+	-rm -f main.pre main.s
 
 .PHONY: clean_all
 clean_all: clean
