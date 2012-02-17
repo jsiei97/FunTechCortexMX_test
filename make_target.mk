@@ -12,7 +12,7 @@ DEBUGFLAGS = -O0 -g
 CFLAGS  = -Wall -Wextra -I./ -c -fno-common $(DEBUGFLAGS) $(MCUFLAGS) -mfix-cortex-m3-ldrd -DUNITY_OUTPUT_PRINT_RING -DUNITY_IGNORE_ARGS -DTARGET_STM32F103RB
 AFLAGS  = -ahls $(MCUFLAGS) 
 LINKFILE = src/stm32.ld
-LFLAGS  = -T$(LINKFILE) -nostartfiles $(MCUFLAGS) -mfix-cortex-m3-ldrd
+LFLAGS  = -T$(LINKFILE) -nostartfiles $(MCUFLAGS) -mfix-cortex-m3-ldrd -Xlinker -Map=main.map 
 
 CPFLAGS = -Obinary
 ODFLAGS = -S

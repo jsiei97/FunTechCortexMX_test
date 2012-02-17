@@ -1,4 +1,5 @@
 
+.PHONY: all
 all: main.bin
 
 OBJ = main.o  
@@ -24,7 +25,7 @@ main.bin: main.elf
 
 main.elf: $(LINKFILE) $(OBJ) 
 	@ echo "..linking"
-	$(LD) $(LFLAGS) -o $@ -Xlinker -Map=main.map $(OBJ)
+	$(LD) $(LFLAGS) -o $@ $(OBJ)
 
 # Same data as with -Map=main.map but the file has a different syntax...
 #arm-none-eabi-nm -n -S main.elf > main.map
@@ -51,7 +52,7 @@ ddd: flash
 clean:
 	-rm -f $(OBJ)
 	-rm -f nvic.* test*.o error*.o
-	-rm -f main.lst main.elf main.bin 
+	-rm -f main.lst main.elf main.bin main.map
 
 .PHONY: clean_all
 clean_all: clean
