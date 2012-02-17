@@ -50,11 +50,6 @@ void low_level_init(void)
     uint32_t data_size  = data_end  - data_begin;
     uint32_t datai_size = datai_end - datai_begin;
 
-    if(data_size != datai_size) {
-        //Linker script is not correct.
-        while(1);
-    }
-
     while(data_begin < data_end)
     {
         *data_begin = *datai_begin;
@@ -62,6 +57,13 @@ void low_level_init(void)
         datai_begin++;
     }
 
+    if(data_size != datai_size) {
+        //If linker script is not correct.
+		//Then we break the system so we don't continue...
+        //while(1);
+        int* pointer = 0x0;
+        *pointer = 0xBAADC0DE;
+    }
 
     main(0,0);
 }

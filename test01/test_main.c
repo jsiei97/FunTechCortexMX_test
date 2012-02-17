@@ -32,11 +32,34 @@ TEST(GroupName, BasicInt)
 }
 
 
+int my_global_variable_zero = 0;
+int my_global_variable_one  = 1;
+int my_global_variable_two  = 2;
+
+/**
+ * Test that variable init works on the system.
+ */
+TEST(GroupName, BasicVarInit)
+{
+    TEST_ASSERT_EQUAL_INT(my_global_variable_zero , 0);
+    TEST_ASSERT_EQUAL_INT(my_global_variable_one  , 1);
+    TEST_ASSERT_EQUAL_INT(my_global_variable_two  , 2);
+
+    static int my_static_zero;
+    static int my_static_one = 1;
+    static int my_static_two = 2;
+
+    TEST_ASSERT_EQUAL_INT(my_static_zero, 0);
+    TEST_ASSERT_EQUAL_INT(my_static_one , 1);
+    TEST_ASSERT_EQUAL_INT(my_static_two , 2);
+}
+
 //Each group has a TEST_GROUP_RUNNER
 TEST_GROUP_RUNNER(GroupName)
 {
     //Each TEST has a corresponding RUN_TEST_CASE
     RUN_TEST_CASE(GroupName, BasicInt);
+    RUN_TEST_CASE(GroupName, BasicVarInit);
     //RUN_TEST_CASE(GroupName, AnotherUniqueTestName);
 }
 
