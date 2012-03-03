@@ -7,7 +7,7 @@ OD      = arm-none-eabi-objdump
 NM      = arm-none-eabi-nm
 SIZE    = arm-none-eabi-size
 
-MCUFLAGS = -march=armv6t2 -mcpu=cortex-m3 -mthumb 
+MCUFLAGS = -march=armv7-m -mcpu=cortex-m3 -mthumb 
 DEBUGFLAGS = -O0 -g
 #DEBUGFLAGS = -O2
 

@@ -314,7 +314,9 @@ int UnityGetCommandLineOptions(int argc, char* argv[])
     UnityFixture.NameFilter = 0;
     UnityFixture.RepeatCount = 1;
 
-#ifndef UNITY_IGNORE_ARGS
+#ifdef UNITY_IGNORE_ARGS
+    UnityFixture.Verbose = 1;
+#else
     if (argc == 1)
         return 0;
 
