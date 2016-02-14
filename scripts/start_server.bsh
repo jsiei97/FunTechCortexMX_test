@@ -18,8 +18,6 @@ else
     cfg_path="/usr/share/openocd/scripts/"
 fi
 
-cfg_port="res/openocd_ports.cfg"
-
 
 #What jtag is connected?
 #Olimex jtag?
@@ -27,7 +25,7 @@ lsusb -d 15ba:0003
 if [ "$?" == "0" ]
 then
     echo "Found: ID 15ba:0003 Olimex Ltd. OpenOCD JTAG"
-    cfg_interface=$cfg_path"interface/olimex-arm-usb-ocd.cfg"
+    cfg_interface=$cfg_path"interface/ftdi/olimex-arm-usb-ocd.cfg"
 fi
 
 #Flyswatter jtag?
@@ -61,12 +59,6 @@ then
     exit 1
 fi
 
-if [ ! -f $cfg_port ] 
-then 
-    echo "Error cfg_port" $cfg_port
-    exit 1
-fi
-
 if [ ! -f $cfg_interface ] 
 then 
     echo "Error cfg_interface" $cfg_interface
@@ -85,8 +77,8 @@ then
     echo "Start the OpenOCD server"
     #xterm -e "openocd -f res/openocd.cfg" &
 
-    xterm -e "openocd -f $cfg_port -f $cfg_interface -f $cfg_target -s $cfg_path" &
-    #openocd -f $cfg_port -f $cfg_interface -f $cfg_target -s $cfg_path &
+    xterm -e "openocd -f $cfg_interface -f $cfg_target -s $cfg_path" &
+    #openocd -f $cfg_interface -f $cfg_target -s $cfg_path &
     OpenOCD_pid=$!
     echo "pid: "$OpenOCD_pid
 
